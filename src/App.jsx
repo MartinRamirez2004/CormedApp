@@ -1,50 +1,65 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import "./App.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
-  const [usuarios, setUsuarios] = useState([]);
-  const [nuevoUsuario, setNuevoUsuario] = useState({ nombre: "", correo: "" });
-
-  useEffect(() => {
-    fetch("http://localhost:5000/usuarios")
-      .then((res) => res.json())
-      .then((data) => setUsuarios(data));
-  }, []);
-
-  const agregarUsuario = async (e) => {
-    e.preventDefault();
-    await fetch("http://localhost:5000/usuarios", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(nuevoUsuario),
-    });
-    setNuevoUsuario({ nombre: "", correo: "" });
-    window.location.reload();
-  };
+  const [isActive, setIsActive] = useState(false);
+  const handleRegisterClick = () => setIsActive(true);
+  const handleLoginClick = () => setIsActive(false);
 
   return (
-    <div>
-      <h1>Usuarios</h1>
-      <form onSubmit={agregarUsuario}>
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={nuevoUsuario.nombre}
-          onChange={(e) => setNuevoUsuario({ ...nuevoUsuario, nombre: e.target.value })}
-        />
-        <input
-          type="email"
-          placeholder="Correo"
-          value={nuevoUsuario.correo}
-          onChange={(e) => setNuevoUsuario({ ...nuevoUsuario, correo: e.target.value })}
-        />
-        <button type="submit">Agregar</button>
-      </form>
+    <div className={`container ${isActive ? "active" : ""}`} id="container">
+      {/* Sign Up Form */}
+      <div className="form-container sign-up">
+        <form>
+          <h1>Create Account</h1>
+          <div className="social-icons">
+            <a href="#" className="icon"><i className="fa-brands fa-google-plus-g"></i></a>
+            <a href="#" className="icon"><i className="fa-brands fa-facebook-f"></i></a>
+            <a href="#" className="icon"><i className="fa-brands fa-github"></i></a>
+            <a href="#" className="icon"><i className="fa-brands fa-linkedin-in"></i></a>
+          </div>
+          <span>or use your email for registration</span>
+          <input type="text" placeholder="Name" />
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <button type="button">Sign Up</button>
+        </form>
+      </div>
 
-      <ul>
-        {usuarios.map((u) => (
-          <li key={u.id}>{u.nombre} - {u.correo}</li>
-        ))}
-      </ul>
+      {/* Sign In Form */}
+      <div className="form-container sign-in">
+        <form>
+          <h1>Sign In</h1>
+          <div className="social-icons">
+            <a href="#" className="icon"><i className="fa-brands fa-google-plus-g"></i></a>
+            <a href="#" className="icon"><i className="fa-brands fa-facebook-f"></i></a>
+            <a href="#" className="icon"><i className="fa-brands fa-github"></i></a>
+            <a href="#" className="icon"><i className="fa-brands fa-linkedin-in"></i></a>
+          </div>
+          <span>or use your email password</span>
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <a href="#">Forgot Your Password?</a>
+          <button type="button">Sign In</button>
+        </form>
+      </div>
+
+      {/* Toggle Container */}
+      <div className="toggle-container">
+        <div className="toggle">
+          <div className="toggle-panel toggle-left">
+            <h1>Welcome Back!</h1>
+            <p>Enter your personal details to use all of site features</p>
+            <button className="hidden" onClick={handleLoginClick}>Sign In</button>
+          </div>
+          <div className="toggle-panel toggle-right">
+            <h1>Hello, Friend!</h1>
+            <p>Register with your personal details to use all of site features</p>
+            <button className="hidden" onClick={handleRegisterClick}>Sign Up</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
